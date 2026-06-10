@@ -2,11 +2,11 @@
 
 ## Current stage
 
-Final audit and GitHub push.
+Complete.
 
 ## Last update
 
-Created `plan.md` and `child_status.md`. Inspected root files, git state, tool availability, expected PDF locations, retry notes, pipeline status, docs, and corpus size. Added and ran the 2D counterfactual grasp failure field simulator. Revised claims, reviewer attacks, and novelty decision from the evidence. Wrote the ICLR paper, compiled it, copied the final PDF to Downloads, created the public GitHub repo, and started final audit commit.
+Created `plan.md` and `child_status.md`. Inspected root files, git state, tool availability, expected PDF locations, retry notes, pipeline status, docs, and corpus size. Added and ran the 2D counterfactual grasp failure field simulator. Revised claims, reviewer attacks, and novelty decision from the evidence. Wrote the ICLR paper, compiled it, copied the final PDF to Downloads, created the public GitHub repo, committed the final audit, pushed, and verified the remote/PDF state.
 
 ## Exact commands run
 
@@ -37,11 +37,17 @@ Created `plan.md` and `child_status.md`. Inspected root files, git state, tool a
 - `try { gh auth status; if ($LASTEXITCODE -ne 0) { Write-Output "GH_AUTH_EXIT_CODE=$LASTEXITCODE" } } catch { Write-Output "GH_AUTH_FAILED: $($_.Exception.Message)" }; exit 0`
 - `try { git add -A; if ($LASTEXITCODE -ne 0) { Write-Output "GIT_ADD_EXIT_CODE=$LASTEXITCODE" }; git status --short; git commit -m "Build counterfactual grasp failure fields paper"; if ($LASTEXITCODE -ne 0) { Write-Output "GIT_COMMIT_EXIT_CODE=$LASTEXITCODE" }; git rev-parse --short HEAD 2>$null; if ($LASTEXITCODE -ne 0) { Write-Output "GIT_REV_PARSE_EXIT_CODE=$LASTEXITCODE" } } catch { Write-Output "GIT_COMMIT_FAILED: $($_.Exception.Message)" }; exit 0`
 - `try { $repo = '02_counterfactual_grasp_failure_fields'; $owner = (gh api user --jq .login 2>$null); if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($owner)) { $owner = 'Jason-Wang313'; Write-Output "OWNER_FALLBACK=$owner" } else { Write-Output "OWNER=$owner" }; gh repo view "$owner/$repo" --json nameWithOwner,url,visibility 2>$null; if ($LASTEXITCODE -eq 0) { Write-Output "REPO_EXISTS"; $url = "https://github.com/$owner/$repo.git"; $hasOrigin = git remote get-url origin 2>$null; if ($LASTEXITCODE -ne 0) { git remote add origin $url; Write-Output "REMOTE_ADDED $url" } else { git remote set-url origin $url; Write-Output "REMOTE_SET $url" }; git push -u origin master; if ($LASTEXITCODE -ne 0) { Write-Output "GIT_PUSH_EXIT_CODE=$LASTEXITCODE" } } else { Write-Output "REPO_CREATE_ATTEMPT"; gh repo create $repo --public --source=. --remote=origin --push; if ($LASTEXITCODE -ne 0) { Write-Output "GH_REPO_CREATE_EXIT_CODE=$LASTEXITCODE" } }; gh repo view "$owner/$repo" --json nameWithOwner,url,visibility,defaultBranchRef } catch { Write-Output "REPO_CREATE_PUSH_FAILED: $($_.Exception.Message)" }; exit 0`
+- `try { git status --short; git add docs/final_audit.md child_status.md; if ($LASTEXITCODE -ne 0) { Write-Output "GIT_ADD_FINAL_EXIT_CODE=$LASTEXITCODE" }; git commit -m "Add final audit"; if ($LASTEXITCODE -ne 0) { Write-Output "GIT_COMMIT_FINAL_EXIT_CODE=$LASTEXITCODE" }; git push; if ($LASTEXITCODE -ne 0) { Write-Output "GIT_PUSH_FINAL_EXIT_CODE=$LASTEXITCODE" }; git rev-parse --short HEAD 2>$null; gh repo view Jason-Wang313/02_counterfactual_grasp_failure_fields --json nameWithOwner,url,visibility,defaultBranchRef } catch { Write-Output "FINAL_COMMIT_PUSH_FAILED: $($_.Exception.Message)" }; exit 0`
+- `try { git status -sb 2>$null; if ($LASTEXITCODE -ne 0) { Write-Output "GIT_STATUS_FINAL_EXIT_CODE=$LASTEXITCODE" } } catch { Write-Output "GIT_STATUS_FINAL_FAILED: $($_.Exception.Message)" }; exit 0`
+- `try { $p='C:/Users/wangz/Downloads/02.pdf'; if (Test-Path -LiteralPath $p) { $item=Get-Item -LiteralPath $p; Write-Output "DOWNLOADS_PDF_EXISTS $($item.Length) bytes $($item.LastWriteTime.ToString('s'))"; pdfinfo $p 2>$null | Select-String -Pattern 'Pages|File size' -ErrorAction SilentlyContinue | ForEach-Object { $_.Line } } else { Write-Output 'DOWNLOADS_PDF_MISSING' } } catch { Write-Output "DOWNLOADS_VERIFY_FAILED: $($_.Exception.Message)" }; exit 0`
+- `try { $p='C:/Users/wangz/OneDrive/Desktop/02.pdf'; if (Test-Path -LiteralPath $p) { $item=Get-Item -LiteralPath $p; Write-Output "DESKTOP_PDF_EXISTS $($item.Length) bytes $($item.LastWriteTime.ToString('s'))" } else { Write-Output 'DESKTOP_PDF_MISSING_PENDING_ORCHESTRATOR_COPY' } } catch { Write-Output "DESKTOP_VERIFY_FAILED: $($_.Exception.Message)" }; exit 0`
+- `try { gh repo view Jason-Wang313/02_counterfactual_grasp_failure_fields --json nameWithOwner,url,visibility,defaultBranchRef,pushedAt } catch { Write-Output "REMOTE_VERIFY_FAILED: $($_.Exception.Message)" }; exit 0`
+- `try { git log --oneline -3 2>$null; if ($LASTEXITCODE -ne 0) { Write-Output "GIT_LOG_FINAL_EXIT_CODE=$LASTEXITCODE" } } catch { Write-Output "GIT_LOG_FINAL_FAILED: $($_.Exception.Message)" }; exit 0`
 
 ## Failures
 
-Final PDF exists at `C:/Users/wangz/Downloads/02.pdf` and was verified by `pdfinfo` as 5 pages / 305,677 bytes. Desktop copy is still missing, so audit says `pending orchestrator copy`. Literature artifacts are valid: 14,429 corpus rows, 300 serious skim, 225 deep read, 100 hostile prior. Experiment completed with 20,000 feasible failed cases: counterfactual field one-step success 1.0; scalar random sign 0.5059; scalar global sign 0.50415; repair-sign entropy 0.99995 bits. Public GitHub repo created at `https://github.com/Jason-Wang313/02_counterfactual_grasp_failure_fields`.
+Final PDF exists at `C:/Users/wangz/Downloads/02.pdf` and was verified by `pdfinfo` as 5 pages / 305,677 bytes. Desktop copy is still missing, so audit says `pending orchestrator copy`. Literature artifacts are valid: 14,429 corpus rows, 300 serious skim, 225 deep read, 100 hostile prior. Experiment completed with 20,000 feasible failed cases: counterfactual field one-step success 1.0; scalar random sign 0.5059; scalar global sign 0.50415; repair-sign entropy 0.99995 bits. Public GitHub repo created and pushed at `https://github.com/Jason-Wang313/02_counterfactual_grasp_failure_fields`; latest pushed commit before this status update was `5d4cb17`.
 
 ## Recovery steps
 
-Commit and push final audit, then verify remote status.
+Commit and push this final status update.
