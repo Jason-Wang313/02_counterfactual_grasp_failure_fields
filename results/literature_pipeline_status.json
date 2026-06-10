@@ -1,0 +1,9 @@
+{
+  "status": "ok",
+  "rows": 14429,
+  "csv": "C:\\Users\\wangz\\robotics_60_paper_batch\\02_counterfactual_grasp_failure_fields\\docs\\related_work_matrix.csv",
+  "queries": 46,
+  "serious_skim": 300,
+  "deep_read": 225,
+  "hostile_prior": 100
+}

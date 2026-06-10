@@ -1,0 +1,313 @@
+\documentclass{article}
+\usepackage{iclr2026_conference,times}
+
+\input{math_commands.tex}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{url}
+
+\title{Counterfactual Grasp Failure Fields}
+
+% Anonymous ICLR-style submission.  Leave \iclrfinalcopy commented.
+\author{Anonymous Authors}
+
+\newtheorem{proposition}{Proposition}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Robot grasp failures are usually stored as terminal labels: a grasp succeeded,
+failed, slipped, or had low quality.  Such labels are useful for prediction but
+discard the contact-level intervention that would have made the realized grasp
+work.  We propose a different object, a \emph{counterfactual grasp failure
+field}: for a failed tactile/contact state, the field is the lowest-cost
+physically executable edit to contact locations or forces that crosses a
+mechanical success boundary.  In a planar two-contact pinch model, this field is
+the minimum-norm projection of the realized contact state onto the feasible
+wrench interval.  The model yields a small but sharp impossibility result:
+paired failures can have identical scalar failure scores while requiring
+opposite contact repairs.  A reproducible simulation with 20,000 feasible failed
+grasps confirms the consequence: the analytic failure field repairs every case
+in one step, while scalar-only repair rules that know failure magnitude but not
+contact-field direction succeed at approximately chance.  The evidence is not a
+real-robot validation; it is a mechanistic counterexample showing that failure
+representation, not only failure prediction, is a central design choice for
+tactile grasp repair.
+\end{abstract}
+
+\section{Introduction}
+
+Grasping research has strong tools for deciding whether a grasp is promising:
+force-closure tests, wrench-space quality metrics, dense visual affordances, and
+learned tactile stability predictors.  These tools answer variants of a scalar
+question: will this grasp hold?  But a robot that has already touched the object
+needs a different answer.  It needs to know which contact should move, by how
+much, and in which direction.
+
+This paper asks whether a grasp failure should be represented as an error label
+or as a counterfactual contact object.  We argue for the latter.  A
+\emph{counterfactual grasp failure field} maps a realized failed contact state to
+the minimal contact edit that would have crossed a mechanical success boundary.
+The field is not a post hoc explanation of a classifier decision.  Its variables
+are physical contact interventions: contact displacements, forces, normals, or
+frictional patches that a robot controller could attempt to change.
+
+The contribution is deliberately narrow.  We do not claim a new tactile sensor,
+a larger model, a new benchmark, or a real-robot result.  Instead we isolate a
+field assumption that is often hidden: a scalar grasp failure score is assumed to
+be a sufficient object for repair.  We show this can be false even in a
+two-contact quasi-static pinch.  The resulting counterexample is small enough to
+analyze exactly and runnable enough to audit.
+
+The paper makes three claims.  First, in a symmetric pinch model, the failure
+field has a closed form as a minimum-norm projection onto a wrench-feasible
+interval.  Second, any deterministic repair rule that factors a failed state
+only through a scalar invariant of absolute failure magnitude cannot choose the
+correct repair for paired states with opposite wrench-balance error.  Third, in
+a 20,000-case simulation, this loss of repair direction matters operationally:
+the field repairs all feasible failures in one step, while scalar-only
+sign-guessing rules repair roughly half.
+
+\section{Related Work and Novelty Boundary}
+
+\paragraph{Grasp mechanics and quality.}
+Analytic grasping defines stability through contact geometry, friction cones,
+force closure, and wrench-space quality \citep{ferrari1992planning,
+bicchi2000robotic,roa2015grasp}.  Large-scale grasp datasets and planners use
+such criteria as labels or training targets for grasp synthesis
+\citep{mahler2017dexnet}.  This paper uses mechanics as the success predicate,
+not as the novelty.  The new object is the counterfactual contact edit from a
+realized failed state back to the success set.
+
+\paragraph{Tactile grasp stability and repair.}
+Tactile sensors can measure slip, shear, contact shape, and grasp stability
+\citep{yuan2015measurement,lambeta2020digit,chebotar2016bigs}.  Closed-loop
+tactile methods can stabilize or regrasp objects using slip prediction,
+simulated tactile transforms, or manipulation primitives
+\citep{veiga2018grip,hogan2018tactile,hogan2020tactile}.  These works motivate
+the field box: contact-rich robot manipulation with tactile evidence.  They do
+not collapse the present claim because they generally treat tactile evidence as
+input to a predictor or controller, whereas the proposed representation makes
+the contact field itself the counterfactual variable.
+
+\paragraph{Counterfactual explanations.}
+Counterfactual explanation methods ask which input changes would flip a model
+decision \citep{pearl2009causality,wachter2017counterfactual}.  Generic feature
+or pixel edits are insufficient for grasp repair unless the edited variables are
+executable contacts.  We therefore restrict counterfactuals to contact-space
+interventions and evaluate them against a mechanical boundary.
+
+\paragraph{Hostile boundary.}
+The closest hostile interpretations are: ``this is just grasp quality with a
+gradient'', ``this is tactile servoing'', and ``force closure already solves
+it''.  In the analytic toy model, the true margin gradient can indeed recover
+the same projection if it is available and calibrated.  The claim is more
+specific: a scalar failure label or same-score representation is not itself an
+adequate repair object.  A failure field records the executable contact edit,
+including its sign and distribution across contacts.
+
+\section{Counterfactual Failure Fields}
+
+Let $x$ be a realized contact state and let $\mathcal{S}$ be the set of contact
+states satisfying a mechanical success predicate.  A counterfactual failure
+field is the solution of
+\begin{equation}
+  F(x) \in \arg\min_{\delta \in \mathcal{A}(x)}
+  c(\delta)
+  \quad \textrm{s.t.} \quad x+\delta \in \mathcal{S},
+  \label{eq:field}
+\end{equation}
+where $\mathcal{A}(x)$ is the set of physically executable contact edits and
+$c$ is a movement, force, or risk cost.  If the set is non-unique, the honest
+object is a repair set; in this paper we use the minimum Euclidean displacement.
+
+\subsection{A Planar Pinch Model}
+
+Consider two opposing point contacts on a planar object.  The left contact is at
+$(-a,y_L)$ with force $(N,t_L)$ and the right contact is at $(a,y_R)$ with force
+$(-N,t_R)$, where $N>0$ is the normal force and $|t_i|\leq \mu N$ are tangential
+friction forces.  The grasp must resist a vertical load $W$ and external torque
+$\tau$.  Quasi-static balance requires
+\begin{equation}
+  t_L + t_R = W,
+  \quad
+  -a t_L + a t_R + N(y_R-y_L) = \tau .
+\end{equation}
+Writing $d=t_R-t_L$, feasibility is equivalent to
+\begin{equation}
+  |d| \leq 2\mu N - W,
+  \quad
+  d = \frac{\tau - N(y_R-y_L)}{a}.
+\end{equation}
+Therefore the contact state succeeds exactly when
+\begin{equation}
+  |e| \leq h,
+  \quad
+  e = \frac{\tau}{N} - (y_R-y_L),
+  \quad
+  h = \frac{a(2\mu N-W)}{N}.
+  \label{eq:interval}
+\end{equation}
+Here $e$ is the wrench-balance error expressed as a missing contact-height
+difference, and $h$ is the radius of the feasible interval.
+
+For a failed state $|e|>h$, the minimum-norm displacement
+$\delta=(\delta_L,\delta_R)$ that reaches the closest boundary of
+Equation~\ref{eq:interval} is
+\begin{equation}
+  g = e - \operatorname{sign}(e)h,
+  \quad
+  \delta_R = \frac{g}{2},
+  \quad
+  \delta_L = -\frac{g}{2}.
+  \label{eq:closedform}
+\end{equation}
+The field says whether the right contact must move up relative to the left or
+down relative to the left.  A scalar score based only on $|e|$ preserves failure
+magnitude but erases this sign.
+
+\begin{proposition}[Scalar insufficiency for deterministic repair]
+Fix any $r>h$ and two failed states $x_+$ and $x_-$ with errors $e(x_+)=r$ and
+$e(x_-)=-r$.  Let $\phi(x)=\psi(|e(x)|)$ be any scalar representation that is
+identical for equal absolute error.  Any deterministic repair rule
+$\pi(\phi(x))$ assigns the same contact edit to $x_+$ and $x_-$.  The
+minimum-norm stabilizing fields for the two states have opposite
+$\delta_R-\delta_L$ signs.  Thus $\pi$ cannot equal the minimum stabilizing
+field on both states, and cannot deterministically repair both by choosing the
+correct signed minimum edit.
+\end{proposition}
+
+\noindent\textbf{Proof.}
+Since $|e(x_+)|=|e(x_-)|=r$, $\phi(x_+)=\phi(x_-)$, so the deterministic rule
+returns the same edit for both.  From Equation~\ref{eq:closedform}, the required
+change in contact-height difference is $r-h$ for $x_+$ and $-(r-h)$ for $x_-$.
+These have opposite signs.  A single signed edit cannot be the minimum field for
+both states. \hfill $\square$
+
+\section{Runnable Evidence}
+
+The experiment samples failed but repairable contact states from the model
+above.  For each state, it computes the analytic field in
+Equation~\ref{eq:closedform}.  We compare against scalar-only rules that know
+the required failure magnitude $|e|-h$ but do not know the sign.  One baseline
+guesses a random sign; another always guesses the majority sign in the sampled
+set.  These baselines are intentionally favorable to scalar information because
+they know how far the state is from the boundary.  They fail only because the
+scalar representation loses repair direction.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.48\linewidth]{../results/same_score_opposite_repairs.png}
+  \hfill
+  \includegraphics[width=0.48\linewidth]{../results/repair_success_rates.png}
+  \caption{Left: the same scalar failure score can correspond to positive or
+  negative contact-difference repairs.  Right: in 20,000 feasible failed grasps,
+  the counterfactual field repairs all cases in one step, while scalar-only
+  sign guesses remain near chance.}
+  \label{fig:results}
+\end{figure}
+
+\begin{table}[t]
+  \centering
+  \caption{Main simulation results.  Success means the repaired state satisfies
+  the mechanical feasibility interval.}
+  \label{tab:results}
+  \begin{tabular}{lc}
+    \hline
+    Quantity & Value \\
+    \hline
+    Feasible failed cases & 20,000 \\
+    Counterfactual field one-step success & 1.0000 \\
+    Scalar random-sign one-step success & 0.5059 \\
+    Scalar global-sign one-step success & 0.50415 \\
+    No-repair success & 0.0000 \\
+    Repair-sign positive fraction & 0.49585 \\
+    Repair-sign entropy after scalarization & 0.99995 bits \\
+    Stable error radius $h$ & 0.31 \\
+    \hline
+  \end{tabular}
+\end{table}
+
+Figure~\ref{fig:results} and Table~\ref{tab:results} show the operational
+effect of scalarization.  The generated paired examples include equal failure
+scores of 0.78245 with contact-difference edits $+0.08$ and $-0.08$, and equal
+failure scores of 0.94685 with edits $+0.18$ and $-0.18$.  Across the random
+sample, the repair sign is nearly balanced, so scalar-only repair leaves almost
+one full bit of unresolved action information.  The analytic field, by
+construction, supplies that missing bit and reaches the nearest success boundary
+in one step whenever the repaired contacts remain inside the finger travel
+limits.
+
+\section{Discussion}
+
+\paragraph{What the evidence supports.}
+The result supports a representational claim: for contact-rich grasp repair,
+there exist mechanically simple settings where a scalar failure score is not a
+sufficient repair object.  The minimum counterfactual contact field retains
+which contact relation must change and how far it must move.
+
+\paragraph{What it does not support.}
+The experiment is not a real-robot demonstration.  It does not model compliant
+contact patches, object pose uncertainty, rolling contacts, multi-finger
+hands, tactile calibration, or high-speed slip dynamics.  It also does not show
+that learned tactile policies cannot implicitly learn useful repairs.  A
+differentiable analytic margin with access to contact coordinates can produce
+the same projection in this toy case.  The point is that the projection should
+be the object represented and evaluated, rather than hidden behind a terminal
+label.
+
+\paragraph{Generalization path.}
+In richer settings, $\mathcal{A}(x)$ can include contact patch translations,
+normal-force redistributions, tangential traction changes, or frictional
+surface edits.  Equation~\ref{eq:field} then becomes a constrained optimization
+or an amortized prediction target.  Non-unique fields should be reported as
+sets, not collapsed prematurely.  This makes ambiguity visible to a controller
+instead of forcing all failure states through one scalar.
+
+\section{Conclusion}
+
+Counterfactual grasp failure fields change the modeled object from ``a grasp
+failed'' to ``this contact edit would have made the realized grasp succeed.''
+The mechanism is old mechanics used in a different place: not only to score a
+candidate grasp, but to represent a failed contact state as a minimal physical
+repair.  The 2D pinch model is small, but it exposes a real assumption.  If two
+failures have the same score but opposite repairs, scalar failure prediction is
+not enough.  Contact-indexed counterfactual fields offer a more direct target
+for tactile grasp recovery.
+
+\section*{Reproducibility Statement}
+
+The simulator and plotting code are included in
+\begin{center}
+\small
+\begin{tabular}{l}
+\texttt{experiments/run\_counterfactual\_fields.py}\\
+\texttt{src/cgff\_mechanics.py}\\
+\texttt{python experiments/run\_counterfactual\_fields.py}\\
+\texttt{--n 20000 --seed 2}
+\end{tabular}
+\end{center}
+These files recreate the CSV summaries and figures used in this paper.
+
+\bibliographystyle{iclr2026_conference}
+\bibliography{references}
+
+\appendix
+
+\section{Additional Derivation}
+
+The friction constraints imply
+$|W+d|\leq 2\mu N$ and $|W-d|\leq 2\mu N$, where $d=t_R-t_L$.  For $W\geq 0$,
+their intersection is $W-2\mu N \leq d \leq 2\mu N-W$.  If $W<2\mu N$, this is
+the interval $|d|\leq 2\mu N-W$.  Substituting the moment-balance expression for
+$d$ gives Equation~\ref{eq:interval}.  The Euclidean projection follows because
+the feasible set depends on $\delta$ only through
+$\delta_R-\delta_L$; the minimum norm allocation of a required difference change
+$g$ is the equal split $(\delta_L,\delta_R)=(-g/2,g/2)$.
+
+\end{document}
