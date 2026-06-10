@@ -1,0 +1,20 @@
+{
+  "claim_scope": "2D quasi-static pinch counterexample; not a real-robot validation",
+  "counterfactual_field_one_step_success": 1.0,
+  "failed_feasible_cases": 20000,
+  "field_minus_random_success": 0.4941,
+  "global_scalar_sign_guess": -1,
+  "mean_failure_score": 0.9503719380292296,
+  "mean_field_l2": 0.39400505893306037,
+  "mean_initial_margin": -0.5572072979867471,
+  "no_repair_success": 0.0,
+  "plot_status": "plots written",
+  "repair_sign_entropy_bits": 0.9999503057987351,
+  "repair_sign_positive_fraction": 0.49585,
+  "requested_cases": 20000,
+  "same_score_pair_count": 4,
+  "scalar_global_sign_one_step_success": 0.50415,
+  "scalar_random_sign_one_step_success": 0.5059,
+  "seed": 2,
+  "stable_error_radius": 0.31
+}
