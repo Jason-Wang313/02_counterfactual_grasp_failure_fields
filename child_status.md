@@ -46,8 +46,8 @@ Created `plan.md` and `child_status.md`. Inspected root files, git state, tool a
 
 ## Failures
 
-Final PDF exists at `C:/Users/wangz/Downloads/02.pdf` and was verified by `pdfinfo` as 5 pages / 305,677 bytes. Desktop copy is still missing, so audit says `pending orchestrator copy`. Literature artifacts are valid: 14,429 corpus rows, 300 serious skim, 225 deep read, 100 hostile prior. Experiment completed with 20,000 feasible failed cases: counterfactual field one-step success 1.0; scalar random sign 0.5059; scalar global sign 0.50415; repair-sign entropy 0.99995 bits. Public GitHub repo created and pushed at `https://github.com/Jason-Wang313/02_counterfactual_grasp_failure_fields`; latest pushed commit before this status update was `5d4cb17`.
+Final PDF exists at `C:/Users/wangz/Downloads/02.pdf` and was verified by `pdfinfo` as 5 pages / 305,677 bytes. Desktop copy is still missing, so audit says `pending orchestrator copy`. Literature artifacts are valid: 14,429 corpus rows, 300 serious skim, 225 deep read, 100 hostile prior. Experiment completed with 20,000 feasible failed cases: counterfactual field one-step success 1.0; scalar random sign 0.5059; scalar global sign 0.50415; repair-sign entropy 0.99995 bits. Public GitHub repo created and pushed at `https://github.com/Jason-Wang313/02_counterfactual_grasp_failure_fields`.
 
 ## Recovery steps
 
-Commit and push this final status update.
+None needed.
