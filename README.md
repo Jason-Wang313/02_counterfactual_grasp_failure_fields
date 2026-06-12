@@ -15,9 +15,12 @@ Key outputs are written to `results/`:
 - `counterfactual_field_summary.json`
 - `counterfactual_field_cases.csv`
 - `same_score_pairs.csv`
+- `seed_stress_summary.csv`
+- `stress_summary.json`
 - `same_score_opposite_repairs.png`
 - `repair_success_rates.png`
 - `pair_failure_fields.png`
+- `stress_success_rates.png`
 
 ## Literature artifacts
 
@@ -30,3 +33,5 @@ The retry run reuses the existing OpenAlex-based sweep:
 ## Scope
 
 This is not a real-robot validation. The experiment is a counterexample and proof-of-concept for the representational claim that scalar failure labels can erase repair direction.
+
+Submission-hardening v2 adds a signed-margin projection upper bound and a 30-seed parameter stress test. The narrowed claim is that scalar magnitude labels lose executable repair direction; signed mechanical margins can recover the field in the toy model.

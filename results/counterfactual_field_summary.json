@@ -3,11 +3,15 @@
   "counterfactual_field_one_step_success": 1.0,
   "failed_feasible_cases": 20000,
   "field_minus_random_success": 0.4941,
+  "finger_y_limit": 1.0,
+  "friction_coeff": 0.72,
   "global_scalar_sign_guess": -1,
+  "half_width": 0.5,
   "mean_failure_score": 0.9503719380292296,
   "mean_field_l2": 0.39400505893306037,
   "mean_initial_margin": -0.5572072979867471,
   "no_repair_success": 0.0,
+  "normal_force": 1.0,
   "plot_status": "plots written",
   "repair_sign_entropy_bits": 0.9999503057987351,
   "repair_sign_positive_fraction": 0.49585,
@@ -16,5 +20,11 @@
   "scalar_global_sign_one_step_success": 0.50415,
   "scalar_random_sign_one_step_success": 0.5059,
   "seed": 2,
-  "stable_error_radius": 0.31
+  "seed_stress_summary_file": "seed_stress_summary.csv",
+  "signed_margin_projection_success": 1.0,
+  "stable_error_radius": 0.31,
+  "stress_field_success_mean": 1.0,
+  "stress_scalar_random_success_mean": 0.4982777777777779,
+  "stress_summary_file": "stress_summary.json",
+  "weight": 0.82
 }

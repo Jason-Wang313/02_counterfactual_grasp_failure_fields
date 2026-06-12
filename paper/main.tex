@@ -19,6 +19,9 @@
 \begin{document}
 
 \maketitle
+\begin{center}
+{\small Submission-hardening version: v2 (2026-06-12).}
+\end{center}
 
 \begin{abstract}
 Robot grasp failures are usually stored as terminal labels: a grasp succeeded,
@@ -34,7 +37,11 @@ paired failures can have identical scalar failure scores while requiring
 opposite contact repairs.  A reproducible simulation with 20,000 feasible failed
 grasps confirms the consequence: the analytic failure field repairs every case
 in one step, while scalar-only repair rules that know failure magnitude but not
-contact-field direction succeed at approximately chance.  The evidence is not a
+contact-field direction succeed at approximately chance.  A signed-margin
+projection upper bound also repairs every case, which narrows the claim: the
+lost object is the signed executable repair direction, not all scalar mechanics.
+Across 30 randomized parameter seeds, the field remains at 1.0 one-step success
+and scalar magnitude-only repair remains near chance.  The evidence is not a
 real-robot validation; it is a mechanistic counterexample showing that failure
 representation, not only failure prediction, is a central design choice for
 tactile grasp repair.
@@ -71,7 +78,9 @@ only through a scalar invariant of absolute failure magnitude cannot choose the
 correct repair for paired states with opposite wrench-balance error.  Third, in
 a 20,000-case simulation, this loss of repair direction matters operationally:
 the field repairs all feasible failures in one step, while scalar-only
-sign-guessing rules repair roughly half.
+sign-guessing rules repair roughly half.  We also include a signed-margin
+projection upper bound, which succeeds exactly and prevents overclaiming:
+mechanical sign information is enough in this toy model.
 
 \section{Related Work and Novelty Boundary}
 
@@ -198,7 +207,9 @@ the required failure magnitude $|e|-h$ but do not know the sign.  One baseline
 guesses a random sign; another always guesses the majority sign in the sampled
 set.  These baselines are intentionally favorable to scalar information because
 they know how far the state is from the boundary.  They fail only because the
-scalar representation loses repair direction.
+scalar representation loses repair direction.  We also include a signed-margin
+projection upper bound that receives the sign of $e$ and therefore recovers the
+same one-step projection as the field in this symmetric model.
 
 \begin{figure}[t]
   \centering
@@ -207,8 +218,8 @@ scalar representation loses repair direction.
   \includegraphics[width=0.48\linewidth]{../results/repair_success_rates.png}
   \caption{Left: the same scalar failure score can correspond to positive or
   negative contact-difference repairs.  Right: in 20,000 feasible failed grasps,
-  the counterfactual field repairs all cases in one step, while scalar-only
-  sign guesses remain near chance.}
+  the counterfactual field and signed-margin upper bound repair all cases in one
+  step, while scalar-magnitude-only sign guesses remain near chance.}
   \label{fig:results}
 \end{figure}
 
@@ -223,6 +234,7 @@ scalar representation loses repair direction.
     \hline
     Feasible failed cases & 20,000 \\
     Counterfactual field one-step success & 1.0000 \\
+    Signed-margin projection success & 1.0000 \\
     Scalar random-sign one-step success & 0.5059 \\
     Scalar global-sign one-step success & 0.50415 \\
     No-repair success & 0.0000 \\
@@ -241,7 +253,26 @@ sample, the repair sign is nearly balanced, so scalar-only repair leaves almost
 one full bit of unresolved action information.  The analytic field, by
 construction, supplies that missing bit and reaches the nearest success boundary
 in one step whenever the repaired contacts remain inside the finger travel
-limits.
+limits.  The signed-margin projection also succeeds, so the result should be
+read as a sufficiency failure of scalar magnitude labels, not as an impossibility
+claim against signed analytic margins or gradients.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.64\linewidth]{../results/stress_success_rates.png}
+  \caption{Thirty-seed parameter stress over half-width, normal force, friction,
+  object weight, and finger travel limits.  Bars show mean one-step success;
+  error bars are 95 percent confidence intervals over seeds.}
+  \label{fig:stress}
+\end{figure}
+
+The stress suite samples 30 parameter settings and 3,000 feasible failures per
+setting.  The counterfactual field and signed-margin projection both have mean
+one-step success 1.0000.  Scalar random-sign repair has mean success
+$0.4983\pm0.0029$, and scalar global-sign repair has mean success
+$0.5073\pm0.0020$.  Repair-sign entropy remains nearly maximal
+($0.9998\pm0.0001$ bits), so the scalar-magnitude representation consistently
+erases the action direction in this balanced family.
 
 \section{Discussion}
 
@@ -259,7 +290,9 @@ that learned tactile policies cannot implicitly learn useful repairs.  A
 differentiable analytic margin with access to contact coordinates can produce
 the same projection in this toy case.  The point is that the projection should
 be the object represented and evaluated, rather than hidden behind a terminal
-label.
+label.  Submission-hardening v2 sharpens this limit: if a method has the signed
+mechanical margin or a calibrated gradient, it can match the field exactly in
+the symmetric pinch model.
 
 \paragraph{Generalization path.}
 In richer settings, $\mathcal{A}(x)$ can include contact patch translations,
@@ -292,7 +325,9 @@ The simulator and plotting code are included in
 \texttt{--n 20000 --seed 2}
 \end{tabular}
 \end{center}
-These files recreate the CSV summaries and figures used in this paper.
+These files recreate the CSV summaries and figures used in this paper.  The
+command also writes \texttt{results/seed\_stress\_summary.csv} and
+\texttt{results/stress\_summary.json} for the 30-seed parameter stress test.
 
 \bibliographystyle{iclr2026_conference}
 \bibliography{references}

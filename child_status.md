@@ -51,3 +51,20 @@ Final PDF exists at `C:/Users/wangz/Downloads/02.pdf` and was verified by `pdfin
 ## Recovery steps
 
 None needed.
+
+Exit code: 0
+End time: 2026-06-10 23:11:04 +01:00
+PDF exists: True
+
+## Submission Hardening v2
+
+Completed: 2026-06-12 19:22:00 +01:00
+Terminal decision: workshop-only
+Canonical PDF: C:/Users/wangz/Downloads/02.pdf
+
+Key changes:
+- Added signed-margin projection upper-bound baseline.
+- Added 30-seed randomized parameter stress suite with confidence intervals.
+- Added `results/stress_success_rates.png`, `results/seed_stress_summary.csv`, and `results/stress_summary.json`.
+- Narrowed the claim to scalar-magnitude insufficiency rather than failure of signed mechanics or gradients.
+- Recompiled paper and replaced the canonical Downloads PDF.
