@@ -220,6 +220,7 @@ This set contains the 100 papers most likely to make the proposed thesis look in
 - Failure modes ignored: Counterfactual contact edits that explain which tactile patch change would avert failure.
 - What it makes less novel: Using tactile signals for grasp-state estimation or feedback.
 - What it leaves open: A representation where tactile failure is a contact-field displacement rather than a terminal class label.
+
 - URL/DOI: https://openalex.org/W4401163822
 
 ## 21. Learning to Detect Slip through Tactile Estimation of the Contact Force Field and its Entropy (2023)
@@ -1101,3 +1102,14 @@ This set contains the 100 papers most likely to make the proposed thesis look in
 - What it makes less novel: Using tactile signals for grasp-state estimation or feedback.
 - What it leaves open: A representation where tactile failure is a contact-field displacement rather than a terminal class label.
 - URL/DOI: https://openalex.org/W4383200202
+
+## Submission-Hardening v2 Addendum
+
+Checked on 2026-06-12 against targeted web search for counterfactual/explainable grasp-failure work.
+
+| Year | Work | Why Hostile | Boundary Left Open |
+|---:|---|---|---|
+| 2025 | "Optimizing Local Explainability in Robotic Grasp Failure Prediction" | Directly hostile to the framing that grasp failure explanations are unstudied. It addresses local explainability for grasp-failure prediction. | The v2 paper should avoid claiming generic counterfactual/explainability novelty and instead focus on executable contact-field edits and the signed repair direction lost by scalar magnitude labels. |
+| 2024-2026 | Slip detection, tactile stability, and visual-tactile grasping papers in the hostile set | Make tactile failure detection and closed-loop correction non-novel. | They typically score, classify, or control from tactile inputs rather than making the minimal executable contact edit the represented object. |
+
+Hardening implication: the paper must not sell "counterfactual grasp failure" broadly. The defensible contribution is a tiny scalar-magnitude insufficiency counterexample plus a reproducible contact-field representation.
