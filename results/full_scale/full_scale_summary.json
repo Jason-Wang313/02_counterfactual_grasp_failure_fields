@@ -1,0 +1,15 @@
+{
+  "claim_scope": "linearized contact-balance simulation; not hardware validation",
+  "figure_count": 5,
+  "raw_trajectories_saved": false,
+  "seed": 7,
+  "streaming": true,
+  "suite_rows": {
+    "biased_scalar_grid.csv": 45000,
+    "large_seed_stress.csv": 54000,
+    "linear_contact_grid.csv": 60480,
+    "mask_limit_grid.csv": 57600,
+    "noise_mismatch_grid.csv": 36000
+  },
+  "total_baseline_rows": 253080
+}
