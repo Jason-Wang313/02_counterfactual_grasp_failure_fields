@@ -6,17 +6,21 @@ Robot grasp failures should be modeled as counterfactual contact fields: for eac
 
 ## 2. Field assumption broken
 
-The broken assumption is that a scalar grasp success/failure score is a sufficient object for repair. In the constructed pinch family, identical scalar failure scores can require opposite signed contact repairs.
+The broken assumption is that a scalar grasp success/failure score is a sufficient object for repair. The final manuscript shows three distinct losses from scalar terminal or magnitude labels:
+
+- signed repair direction is erased;
+- contact allocation is erased when multiple coordinates can share the repair;
+- feasibility is hidden when active-contact masks or actuator/travel limits make some repairs impossible.
 
 ## 3. New central mechanism
 
-The central mechanism is a contact-indexed minimum-norm projection from a failed contact state to the nearest wrench-feasible contact state. In the 2D pinch model, this field has the closed form `dy_right = g/2`, `dy_left = -g/2`, where `g = e - sign(e) h`.
+The central mechanism is a contact-indexed minimum-cost projection from a failed contact state to the nearest feasible contact state. In the original 2D pinch model, this field has the closed form `dy_right = g/2`, `dy_left = -g/2`, where `g = e - sign(e) h`. In the v3 full-scale pass, the same idea is generalized to a linear contact-balance family with contact weights, repair costs, active masks, travel limits, biased repair-sign distributions, and noisy/mismatched margin estimates.
 
 ## 4. Genuine novelty
 
-The paper does not claim novelty for force closure, grasp quality, tactile slip detection, tactile servoing, or generic counterfactual explanations. The novelty boundary is the explicit representation of a realized failed grasp as an executable counterfactual contact field rather than a terminal scalar label or post hoc feature explanation.
+The paper does not claim novelty for force closure, grasp quality, tactile slip detection, tactile servoing, or generic counterfactual explanations. The defensible novelty boundary is the explicit representation of a realized failed grasp as an executable counterfactual contact field rather than a terminal scalar label or post hoc feature explanation.
 
-Submission-hardening v2 narrows the claim: a signed mechanical margin/projection exactly recovers the field in this symmetric toy model. The defensible novelty boundary is therefore scalar-magnitude insufficiency and executable contact-direction representation, not a general impossibility claim against gradients or signed analytic margins.
+The final v3 manuscript is careful about the signed-mechanics upper bound: a calibrated signed mechanical margin/projection can exactly recover the field in the linear model. The claim is therefore not that analytic gradients or signed mechanics fail. The claim is that scalar terminal labels and scalar magnitude scores discard repair direction, allocation, and feasibility information that the field representation keeps explicit and auditable.
 
 ## 5. Closest hostile prior work
 
@@ -35,11 +39,11 @@ The retry artifacts validated a metadata-level OpenAlex sweep with 14,429 rows i
 
 ## 7. Proof/formal-claim status
 
-The manuscript proves a narrow scalar-insufficiency proposition for a symmetric two-contact planar pinch family. The claim is a counterexample to scalar sufficiency for deterministic one-step repair, not a theorem that all scalar classifiers, all gradients, or all learned tactile policies fail.
+The manuscript proves a narrow scalar-insufficiency proposition for a symmetric two-contact planar pinch family. The final claim remains a counterexample and diagnostic representation claim. It is not a theorem that all scalar classifiers, all gradients, all learned tactile policies, or all signed analytic margins fail.
 
 ## 8. Strongest evidence
 
-Runnable evidence:
+Original reproducible evidence:
 
 - Command: `python experiments/run_counterfactual_fields.py --n 20000 --seed 2`
 - Feasible failed cases: 20,000
@@ -50,33 +54,41 @@ Runnable evidence:
 - Repair-sign entropy after scalarization: 0.99995 bits
 - Same-score paired examples in `results/same_score_pairs.csv` show equal scalar failure scores with opposite contact-difference edits.
 
-Submission-hardening v2 stress evidence:
+Full-scale v3 evidence:
 
-- `results/seed_stress_summary.csv`: 30 randomized parameter seeds, 3,000 feasible failed cases per seed.
-- Field mean one-step success: 1.0.
-- Signed-margin projection mean one-step success: 1.0.
-- Scalar random-sign mean one-step success: `0.4983 +/- 0.0029`.
-- Scalar global-sign mean one-step success: `0.5073 +/- 0.0020`.
-- Mean repair-sign entropy: `0.9998 +/- 0.0001` bits.
+- Command: `python experiments/run_full_scale_fields.py`
+- Fast regeneration path: `python experiments/run_full_scale_fields.py --summarize-only`
+- Total streamed baseline rows: 253,080
+- Linear contact grid: scalar magnitude-only baselines remain near chance at 48.9 percent to 50.3 percent; counterfactual field and exact signed-margin projection reach 100.0 percent.
+- Biased scalar grid: scalar global-sign repair reaches 95.1 percent average success at a 0.95 positive-sign prior but has 0.0 percent worst-group success.
+- Mask/limit grid: constrained field success is 93.5 percent overall; the 6.5 percent gap is reported as infeasible rather than counted as a hidden repair win. The hardest tested cell reaches 19.0 percent infeasibility.
+- Noise/mismatch grid: noisy signed-margin projection loses the one-step guarantee because boundary-targeted repairs have no slack.
+- Large stress suite: counterfactual field and signed-margin projection reach 96.0 percent success; nearest-contact repair reaches 79.4 percent, uniform signed repair 63.3 percent, scalar random-sign 46.9 percent, scalar global-sign 68.3 percent average with 0.0 percent worst-group success, and scalar prior-sample 61.6 percent.
 
 ## 9. Biggest weaknesses
 
 - No real-robot validation.
-- The simulator is quasi-static, planar, and two-contact only.
-- Contact compliance, object pose uncertainty, rolling contacts, high-speed slip, and tactile calibration are not modeled.
-- A true differentiable mechanical margin with contact coordinates can reproduce the field by projection in this toy model; the claim is about scalar-label sufficiency, not impossibility of analytic gradients.
-- The stress suite is still synthetic and balanced; chance-like scalar performance is not promised for arbitrary biased datasets.
+- The final simulator is still a linearized contact-balance model, not 3D compliant grasping with full friction-cone geometry.
+- Contact compliance, object pose uncertainty, rolling contacts, high-speed slip, sensor calibration, and tactile image formation are not modeled.
+- A true differentiable mechanical margin with signed contact coordinates can reproduce the field by projection in this model; the contribution is representation and auditability, not domination over exact mechanics.
+- The noisy-margin experiments show that boundary-targeted one-step repair is brittle when the margin estimate is mismatched.
 - Bibliography is representative and hostile-set guided, but not exhaustive manual full-text coverage.
 
 ## 10. Paper-readiness judgment
 
-Workshop-only for immediate submission; strong-revise for any main-conference target. The paper is clean as a mechanism/proof-of-concept and counterexample, but it needs real tactile or higher-fidelity simulation evidence before a strong ICLR/robot-learning submission. The terminal condition for paper 02 is therefore `workshop-only`.
+Final under the current batch standard as a 26-page simulation/mechanism paper with a full-scale experimental pass, stronger baselines, ablations, stress tests, feasibility accounting, figures, tables, limitations, and reproducibility details.
+
+It remains not hardware-ready and should not be described as a real-robot validation. For a top robotics venue, the honest next step would be real tactile/hardware evidence or a higher-fidelity 3D contact simulator. Under this batch's final-version gate, Paper 02 is complete and may be moved forward.
 
 ## 11. Exact Downloads PDF path
 
 `C:/Users/wangz/Downloads/02.pdf`
 
-Verified with `pdfinfo`: 5 pages, 305,677 bytes.
+Verified with `pdfinfo` after final copy: 26 pages, 883,125 bytes.
+
+Verified with `pdftotext`: the Downloads PDF is the actual paper, beginning with `Counterfactual Grasp Failure Fields`, and includes the final abstract with the 253,080 streamed baseline evaluations.
+
+Marker check on the Downloads PDF passed for: `Submission-hardening`, `ROBOTICS_1_60`, `Decision:`, `workshop-only`, and `Downloads`.
 
 ## 12. GitHub URL
 
@@ -84,19 +96,11 @@ Verified with `pdfinfo`: 5 pages, 305,677 bytes.
 
 ## 13. Desktop copy status
 
-`pending orchestrator copy`
+No Desktop copy is required for the current batch standard. The canonical final artifact is the exact numbered Downloads PDF above.
 
-The local check found no `C:\Users\wangz\OneDrive\Desktop\02.pdf` at audit time.
+## 14. Build and recovery notes
 
-## Build and recovery notes
-
-- Latest official ICLR template source found at runtime: ICLR 2026 Author Guide pointing to `https://github.com/ICLR/Master-Template/raw/master/iclr2026.zip`.
 - `latexmk` was unavailable in practice because MiKTeX could not find Perl.
-- Recovery: compiled successfully with direct `pdflatex`, `bibtex`, `pdflatex`, `pdflatex` passes.
-- Final deliverable copied to the exact Downloads path. The generated `paper/main.pdf` and unpacked template archive were removed from the repo tree after delivery so the numbered Downloads PDF is the final PDF artifact.
-
-## Orchestrator Desktop Copy
-
-Checked: 2026-06-10 23:11:08 +01:00
-Downloads PDF: C:/Users/wangz/Downloads/02.pdf
-Result: copy script exit 0 log C:\Users\wangz\robotics_60_paper_batch\logs\desktop_copy_02_20260610_231104.log
+- Recovery path: compiled successfully with direct `pdflatex`, `bibtex`, `pdflatex`, `pdflatex` passes.
+- Final local build was copied to `C:/Users/wangz/Downloads/02.pdf` only after the manuscript cleared the 25-page gate.
+- The generated `paper/main.pdf` is removed after final copy so the numbered Downloads PDF remains the final PDF artifact.
