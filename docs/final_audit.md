@@ -88,7 +88,17 @@ Verified with `pdfinfo` after final copy: 26 pages, 883,125 bytes.
 
 Verified with `pdftotext`: the Downloads PDF is the actual paper, beginning with `Counterfactual Grasp Failure Fields`, and includes the final abstract with the 253,080 streamed baseline evaluations.
 
-Marker check on the Downloads PDF passed for: `Submission-hardening`, `ROBOTICS_1_60`, `Decision:`, `workshop-only`, and `Downloads`.
+2026-06-21 VLA highlight-hardening verification:
+
+- SHA256: `CB74476B2C5C663057880B01E80C4854F674D45209F36DBDE48B98AB71B0EC59`
+- Link annotations: 33 total on pages `[(2, 25), (3, 1), (4, 2), (5, 1), (7, 1), (9, 1), (15, 1), (18, 1)]`
+- Colors: green = 25, red = 8, cyan = 0
+- Borders: `(0, 0, 1)` for all annotations
+- Oversized page-edge annotation audit: 0 malformed rectangles
+- Visual audit: pages 2, 3, 4, 5, 7, 9, 15, and 18 rendered and inspected
+- Cleanup: no duplicate `C:/Users/wangz/Downloads/2.pdf`; local `paper/main.pdf` removed after export
+
+Marker check on the Downloads PDF passed for: `253,080`, `96.0`, `0.0% worst-group`, `Counterfactual Grasp Failure Fields`, `scalar`, `field`, and `claim`.
 
 ## 12. GitHub URL
 

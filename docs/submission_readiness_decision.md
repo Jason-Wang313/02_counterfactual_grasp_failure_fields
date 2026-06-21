@@ -17,3 +17,15 @@ The paper is not real-robot or high-fidelity 3D contact evidence. For a top robo
 ## Terminal Condition
 
 Paper 02 is complete for this batch once the final 26-page PDF is verified at `C:/Users/wangz/Downloads/02.pdf`, repo docs/logs are updated, and the final repo state is committed and pushed.
+
+## 2026-06-21 VLA Highlight Gate
+
+Passed. The canonical PDF at `C:/Users/wangz/Downloads/02.pdf` remains 26 pages and now has an explicit VLA-v4 boxed-link policy in source.
+
+- Size: 883,125 bytes
+- SHA256: `CB74476B2C5C663057880B01E80C4854F674D45209F36DBDE48B98AB71B0EC59`
+- Link annotations: 33 total; green = 25, red = 8, cyan = 0
+- Link-bearing pages: `[(2, 25), (3, 1), (4, 2), (5, 1), (7, 1), (9, 1), (15, 1), (18, 1)]`
+- Border widths: `(0, 0, 1)` for all annotations
+- Visual audit: pages 2, 3, 4, 5, 7, 9, 15, and 18 rendered and inspected
+- Cleanup: zero malformed page-edge annotations, no duplicate `2.pdf`, and no local `paper/main.pdf`

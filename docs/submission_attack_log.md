@@ -22,7 +22,10 @@ Date: 2026-06-13 18:35:00 +01:00
 | 11 | Feasibility failures are hidden. | Added active-mask and travel-limit suite with infeasible cases reported explicitly. | Real actuators/friction would need richer constraints. |
 | 12 | Signed margins are brittle under noise. | Added noise/mismatch suite and reported degradation honestly. | Robust control with slack is future work. |
 | 13 | Venue fit is weak. | Reclassified as final for the current batch's simulation/mechanism-paper standard, not hardware-ready. | Top robotics path still needs real tactile or richer simulation evidence. |
+| 14 | PDF link boxes must visually match the visible VLA-v4 role model. | Added explicit hyperref boxed-link policy, rebuilt, rendered all link-bearing pages, and verified green citation/URL boxes plus red internal-reference boxes. | Visual style is verified for this artifact; future source edits must preserve the policy. |
 
 ## Stop Condition
 
 The v3 pass completed the recoverable local scope: full-scale streamed experiments, stronger baselines, ablations, stress tests, paper-ready figures/tables, a 26-page final manuscript, and explicit limitations. Remaining concerns require external hardware or a different simulator rather than more local polishing.
+
+The 2026-06-21 VLA highlight-hardening pass completed visual delivery scope: `C:/Users/wangz/Downloads/02.pdf` is 26 pages, 883,125 bytes, SHA256 `CB74476B2C5C663057880B01E80C4854F674D45209F36DBDE48B98AB71B0EC59`, with 33 role-model-style link annotations and zero malformed page-edge rectangles.
