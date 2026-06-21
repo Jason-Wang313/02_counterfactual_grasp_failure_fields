@@ -61,3 +61,7 @@ pdflatex main.tex
 - Final local build verified at 26 pages before copying to Downloads.
 - Downloads copy allowed only after the PDF text is verified as the actual paper.
 - After copying, remove the transient local `paper/main.pdf`; the canonical final PDF is `C:/Users/wangz/Downloads/02.pdf`.
+- Current canonical artifact after 2026-06-21 VLA highlight hardening: `C:/Users/wangz/Downloads/02.pdf`, 26 pages, 883,125 bytes, SHA256 `CB74476B2C5C663057880B01E80C4854F674D45209F36DBDE48B98AB71B0EC59`.
+- Link annotation verification: 33 annotations on pages `[(2, 25), (3, 1), (4, 2), (5, 1), (7, 1), (9, 1), (15, 1), (18, 1)]`; green = 25, red = 8, cyan = 0; all borders `(0, 0, 1)`.
+- Visual verification: rendered link-bearing pages 2, 3, 4, 5, 7, 9, 15, and 18; no oversized page-edge annotations.
+- Cleanup verification: no duplicate `C:/Users/wangz/Downloads/2.pdf`; local `paper/main.pdf` removed.

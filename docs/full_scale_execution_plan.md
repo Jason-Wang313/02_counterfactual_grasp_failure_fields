@@ -126,3 +126,12 @@ Target at least 26 pages to clear the 25-page gate with margin. Main text should
 - Docs/logs/reproducibility materials updated.
 - Local generated `paper/main.pdf` removed after final copy.
 - Repo committed and pushed clean before moving to Paper 03.
+
+## 2026-06-21 VLA Highlight Addendum
+
+- Explicit VLA-v4 boxed-link policy added to `paper/main.tex`.
+- Final artifact remains `C:\Users\wangz\Downloads\02.pdf`.
+- Verified final PDF: 26 pages, 883,125 bytes, SHA256 `CB74476B2C5C663057880B01E80C4854F674D45209F36DBDE48B98AB71B0EC59`.
+- Verified link inventory: 33 annotations; green = 25, red = 8, cyan = 0; all borders `(0, 0, 1)`.
+- Rendered and visually inspected all link-bearing pages: 2, 3, 4, 5, 7, 9, 15, and 18.
+- Verified zero malformed page-edge rectangles, no duplicate `2.pdf`, and no leftover local `paper/main.pdf`.

@@ -59,7 +59,7 @@ PDF exists: True
 ## Submission Hardening v2
 
 Completed: 2026-06-12 19:22:00 +01:00
-Terminal decision: workshop-only
+Terminal decision: superseded by the v3 full-scale final decision
 Canonical PDF: C:/Users/wangz/Downloads/02.pdf
 
 Key changes:
@@ -68,3 +68,17 @@ Key changes:
 - Added `results/stress_success_rates.png`, `results/seed_stress_summary.csv`, and `results/stress_summary.json`.
 - Narrowed the claim to scalar-magnitude insufficiency rather than failure of signed mechanics or gradients.
 - Recompiled paper and replaced the canonical Downloads PDF.
+
+## VLA Highlight Hardening
+
+Completed: 2026-06-21
+Canonical PDF: C:/Users/wangz/Downloads/02.pdf
+
+Key changes:
+- Added explicit VLA-v4 boxed-link `\hypersetup` in `paper/main.tex`.
+- Rebuilt with manual `pdflatex`, `bibtex`, `pdflatex`, `pdflatex` passes and replaced the canonical Downloads PDF only after verification.
+- Verified final PDF is 26 pages, 883,125 bytes, SHA256 `CB74476B2C5C663057880B01E80C4854F674D45209F36DBDE48B98AB71B0EC59`.
+- Verified 33 link annotations on pages `[(2, 25), (3, 1), (4, 2), (5, 1), (7, 1), (9, 1), (15, 1), (18, 1)]`.
+- Verified link colors match the role model: green = 25, red = 8, cyan = 0, with all borders `(0, 0, 1)`.
+- Rendered and visually inspected all link-bearing pages: 2, 3, 4, 5, 7, 9, 15, and 18.
+- Confirmed zero malformed page-edge annotations, no duplicate `C:/Users/wangz/Downloads/2.pdf`, and no leftover local `paper/main.pdf`.

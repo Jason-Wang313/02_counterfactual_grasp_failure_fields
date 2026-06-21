@@ -5,6 +5,8 @@
 - Final manuscript target for this pass: at least 25 pages of real content.
 - Verified local build before Downloads copy: 26 pages.
 - No intermediate PDF was copied to Downloads before the final gate.
+- 2026-06-21 canonical PDF after VLA boxed-link hardening: `C:/Users/wangz/Downloads/02.pdf`, 26 pages, 883,125 bytes, SHA256 `CB74476B2C5C663057880B01E80C4854F674D45209F36DBDE48B98AB71B0EC59`.
+- Final link inventory: 33 annotations; green = 25, red = 8, cyan = 0; all borders `(0, 0, 1)`; zero malformed page-edge rectangles.
 
 ## Full-Scale Run
 
@@ -43,3 +45,10 @@
 - `paper/tables/bias_worst_group_table.tex`
 - `paper/tables/mask_feasibility_table.tex`
 - `paper/tables/noise_boundary_table.tex`
+
+## Visual Delivery Check
+
+- VLA-style boxed links are explicitly pinned in `paper/main.tex`.
+- Link-bearing pages rendered and inspected: 2, 3, 4, 5, 7, 9, 15, and 18.
+- Visual result matches the visible VLA-v4 role model: green citation/URL boxes and red internal-reference boxes, with no cyan boxes.
+- No local `paper/main.pdf` remains after export, and no duplicate non-canonical `2.pdf` exists in Downloads.
